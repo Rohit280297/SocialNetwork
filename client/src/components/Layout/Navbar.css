@@ -1,0 +1,33 @@
+.Navbar{
+    width:100%;
+    background-color:#36354f;
+}
+
+.Navbar ul{
+    display:inline-block;
+    margin: 15px 10px;
+}
+
+.Navbar ul li{
+    color:#ddd;
+    list-style: none;
+    display: inline;
+    margin: 0px 10px;
+    font-size: 16px;
+}
+
+ul li:hover{
+    cursor: pointer;
+    color: white;
+}
+
+.Navbar ul:first-child li{
+    position: relative;
+    align-content: flex-start;
+}
+
+.Navbar ul:last-child{
+    position: relative;
+    float: right;
+}
+

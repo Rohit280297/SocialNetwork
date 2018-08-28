@@ -1,0 +1,39 @@
+.SignUp{
+    text-align:center;
+    padding:20px;
+}
+
+.signUpForm{
+    padding:10px;
+    margin: auto;
+    text-align: center;
+}
+
+.signUpForm input{
+    width:80%;
+    margin: 30px auto;
+    border:1px solid #ddd;
+    border-radius:5px;
+    padding: 15px;
+    outline:none;
+    font-size:25px;
+}
+
+.signUpForm input[type=submit]{
+    width: 80%;
+    margin:auto;
+    padding:10px;
+    color:white;
+    background: #0099ff;
+    font-size:20px;
+    outline:none;
+    border-radius:5px;
+}
+
+.signUpForm input:focus{
+    border:2px solid #0099ff;
+}
+
+.signUpForm input[type=submit]:hover{
+    cursor: pointer;
+}
