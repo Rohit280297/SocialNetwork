@@ -5,7 +5,6 @@ const passport = require('passport');
 const users = require('./routes/apis/users');
 const profile = require('./routes/apis/profile');
 const posts = require('./routes/apis/posts');
-
 const app = express();
 
 app.use(bodyParser.urlencoded({extended:false}));
@@ -24,7 +23,7 @@ mongoose.connect(db).then(()=>{
     console.log('Error connecting database');
 });
 
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3000;
 
 // app.get('/',(req,res)=>{
 //     res.send('Hello People!');
