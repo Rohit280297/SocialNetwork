@@ -7,7 +7,7 @@ const validateLoginInputs = (data) =>{
         errors.email = "Email is Required";
     }
 
-    if(!Validator.isEmail(data.email)){
+    if(! Validator.isEmail(data.email)){
         errors.email = "Invalid Email";
     }
 

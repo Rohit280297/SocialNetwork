@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const passport = require('passport');
-
+const profileInputValidator = require('../../validation/profile');
 const {User} = require('../../models/User');
 const {Profile} = require('../../models/Profile');
 const route = express.Router();
@@ -12,10 +12,8 @@ route.get('/test',(req,res)=>res.json({message:"Profile is working"}));
 
 route.get('/profile',passport.authenticate('jwt',{session:false}),(req,res)=>{
 
-    console.log('sdjfs');
-    Profile.findOne({user:req.user.id}).then(profile=>{
+    Profile.findOne({user:req.user.id}).populate('user',['name','avatar']).then(profile=>{
         let errors={};
-        console.log('errors ke neeche');
         if(!profile){
             errors.noprofile='There is no profile for this user';
             return res.status(404).json(errors);
@@ -32,6 +30,12 @@ route.get('/profile',passport.authenticate('jwt',{session:false}),(req,res)=>{
 
 route.post('/profile',passport.authenticate('jwt',{session:false}),(req,res)=>{
     let profile1= {};
+
+    const {errors, isValid} = profileInputValidator(req.body);
+
+    if(!isValid){
+        return res.status(400).json(errors);
+    }
 
     profile1.user = req.user.id;
     if(req.body.handle) profile1.handle = req.body.handle;
@@ -57,7 +61,7 @@ route.post('/profile',passport.authenticate('jwt',{session:false}),(req,res)=>{
     Profile.findOne({user:req.user.id}).then(profile=>{
         if(profile){
             // Update the existing profile
-            console.log('Inside if');
+            
             Profile.findOneAndUpdate({user:req.body.id},{$set:{profile1}},{new:true})
             .then(profile=>res.json(profile1))
             .catch(e=>{res.send(e)});

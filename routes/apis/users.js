@@ -64,7 +64,6 @@ route.post('/login',(req,res)=>{
     if(!isValid){
         return res.status(400).json(errors);
     }
-    console.log(body.password);
     User.findOne({email:body.email}).then(user=>{
         if(!user){
             errors.email="User not found";
