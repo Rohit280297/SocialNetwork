@@ -12,13 +12,14 @@ const validateLoginInput = require('../../validation/login');
 
 route.get('/test',(req,res)=>res.json({message:"Users is working"}));
 
-route.post('/register',(req,res)=>{
+route.post('/register',(req,res)=>{ 
 
     console.log('Post is received at the server');
     let { errors,isValid } = validateRegisterInput(req.body);
     if(!isValid){
         return res.status(400).json(errors);
     }
+    console.log('request is valid');
 
     User.findOne({email:req.body.email}).then(user=>{
         if(user){
@@ -40,22 +41,22 @@ route.post('/register',(req,res)=>{
                 avatar
             });
              
-            bcrypt.genSalt(10,(error,salt)=>{
+            bcrypt.genSalt(10,(err,salt)=>{
                 bcrypt.hash(newUser.password,salt,(err,hash)=>{
                     if(err) throw err;
 
                     newUser.password =hash;
                     newUser.save().then(user=>{
+                        console.log(user," is sent");
                         res.status(200).json(user);
                     }).catch(e=>{
-                        res.status(400).send(e);
+                        console.log('Error occured', e);
+                        res.status(400).json(e);
                     })
                 });
             });
         }
-    }).catch(e=>{
-        res.status(400).send(e);
-    });
+    })
 });
 
 route.post('/login',(req,res)=>{
@@ -77,7 +78,7 @@ route.post('/login',(req,res)=>{
                 // res.status(200).json('Successfully Logged In');
                 let payload = {id:user._id,name:user.name,avatar:user.avatar,email:user.email}
                 jwt.sign(payload,secret,(err,token)=>{
-                    res.header('Bearer',token).send('Successful');
+                    res.json({success:true,token : 'Bearer '+ token});
                 });
             }
             else{

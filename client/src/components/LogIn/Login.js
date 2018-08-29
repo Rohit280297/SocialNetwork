@@ -3,7 +3,6 @@ import './Login.css';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {loginUser} from '../../actions/authAction';
-import axios from 'axios';
 class Login extends Component {
 
     constructor(){
@@ -19,14 +18,14 @@ class Login extends Component {
         this.setState({[e.target.name]:e.target.value});
     }
 
-    // componentWillReceiveProps(nextProps){
-    //     if(nextProps.auth.isAuthenticated){
-    //         this.props.history.push('/dashboard');
-    //     }
-    //     if(nextProps.errors){
-    //         this.setState({errors:nextProps.errors})
-    //     }
-    // }
+    componentWillReceiveProps(nextProps){
+        if(nextProps.auth.isAuthenticated){
+            this.props.history.push('/dashboard');
+        }
+        if(nextProps.errors){
+            this.setState({errors:nextProps.errors})
+        }
+    }
 
     onSubmitHandler= (e)=>{
 
@@ -37,14 +36,15 @@ class Login extends Component {
             password:this.state.password
         }
 
-        axios.post('/api/users/login',loginDetails).then(res=>console.log(res)).catch(err=>console.log(err));
+        // axios.post('/api/users/login',loginDetails).then(res=>console.log(res)).catch(err=>console.log(err));
 
-        // this.props.loginUser(loginDetails);
+        this.props.loginUser(loginDetails);
 
     }
   render() {
 
-    const {errors} = this.state;
+    // const {errors} = this.state;
+
     return (
         <div className="LogIn">
         <div className="container">
@@ -61,17 +61,17 @@ class Login extends Component {
   }
 }
 
-// Login.propTypes = {
-//     loginUser : PropTypes.func.isRequired,
-//     auth: PropTypes.object.isRequired,
-//     errors: PropTypes.object
-// }
+Login.propTypes = {
+    loginUser : PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired,
+    errors: PropTypes.object
+}
 
 
 
-// const mapStateToProps = state =>({
-//     auth:state.auth,
-//     errors:state.errors
-// })
+const mapStateToProps = state =>({
+    auth:state.auth,
+    errors:state.errors
+})
 
-export default Login;
+export default connect(mapStateToProps,{loginUser})(Login);

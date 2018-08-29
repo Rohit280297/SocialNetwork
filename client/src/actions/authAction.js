@@ -7,6 +7,7 @@ export const registerUser = (userData,history) =>dispatch=> {
 
    axios.post('/api/users/register',userData)
    .then(res=>{
+            console.log("Result",res.data);
             history.push('/login');
         })
     .catch(e=>
@@ -22,7 +23,7 @@ export const loginUser = userData => dispatch => {
     .then(res=>{
         // save to local storage
         const {token} = res.data;
-
+    
         localStorage.setItem('jwtToken',token);
 
         setAuthToken(token);
@@ -31,11 +32,13 @@ export const loginUser = userData => dispatch => {
 
         dispatch(setCurrentUser(decoded));
 
-    }).catch(e=>
+    }).catch(e=>{
+        console.log("Error in catch",e)
         dispatch({
             type:GET_ERRORS,
             payload:e.response.data
         })
+    }
     );
 };
 
@@ -43,5 +46,17 @@ export const setCurrentUser = decoded =>{
     return {
         type: SET_CURRENT_USER,
         payload: decoded
-    }
+    };
+};
+
+export const logoutUser = () => dispatch =>{
+    // Remove token from localStorage
+    
+    localStorage.removeItem('jwtToken');
+
+    // Remove token from future requests
+
+    setAuthToken(false);
+
+    dispatch(setCurrentUser({}));
 }
