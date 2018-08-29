@@ -14,16 +14,16 @@ route.get('/test',(req,res)=>res.json({message:"Users is working"}));
 
 route.post('/register',(req,res)=>{
 
-    let {errors,isValid} = validateRegisterInput(req.body);
+    console.log('Post is received at the server');
+    let { errors,isValid } = validateRegisterInput(req.body);
     if(!isValid){
         return res.status(400).json(errors);
     }
-    console.log('under if');
 
     User.findOne({email:req.body.email}).then(user=>{
         if(user){
             errors.email = "Email already exists";
-            console.log('inside if');
+            // console.log('inside if');
             return res.status(400).json(errors);
         }
         else{
@@ -41,10 +41,12 @@ route.post('/register',(req,res)=>{
             });
              
             bcrypt.genSalt(10,(error,salt)=>{
-                bcrypt.hash(req.body.password,salt,(err,hash)=>{
-                    newUser.set({password:hash});
+                bcrypt.hash(newUser.password,salt,(err,hash)=>{
+                    if(err) throw err;
+
+                    newUser.password =hash;
                     newUser.save().then(user=>{
-                        res.status(200).json({"This is the response":user});
+                        res.status(200).json(user);
                     }).catch(e=>{
                         res.status(400).send(e);
                     })
